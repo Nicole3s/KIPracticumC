@@ -45,8 +45,31 @@ class ValueIterationAgent(ValueEstimationAgent):
 
         # Write value iteration code here
         "*** YOUR CODE HERE ***"
+        counter = 0
+        copyvalues = self.values.copy()
 
+        while self.iterations != counter:
+          for s in mdp.getStates():
+           maxq = None
 
+           for a in self.mdp.getPossibleActions(s):
+             q = self.computeQValueFromValues(s, a)
+             if maxq == None or maxq < q:
+              maxq = q
+           if maxq == None:
+            maxq = 0
+
+           copyvalues[s] = maxq
+
+          self.values = copyvalues
+
+          counter += 1
+# update de hele grid niet per state
+# 1e vraag was de formule uit de slide van hc gebruiken en niet van Berkley
+
+# self state
+
+#
     def getValue(self, state):
         """
           Return the value of the state (computed in __init__).
@@ -60,6 +83,14 @@ class ValueIterationAgent(ValueEstimationAgent):
           value function stored in self.values.
         """
         "*** YOUR CODE HERE ***"
+        # de Bellman equation hier doen
+        # next state
+        q =0
+        nextstate = self.mdp.getTransitionStatesAndProbs(state, action)[0]
+        for nextstate, prob in self.mdp.getTransitionStatesAndProbs(state, action):
+          q += prob * (self.mdp.getReward(state, action, nextstate) + (self.discount * self.getValue((nextstate))))
+        return q
+
         util.raiseNotDefined()
 
     def computeActionFromValues(self, state):
@@ -72,6 +103,18 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
+
+        if len(self.mdp.getPossibleActions(state)) == 0:
+            return None
+        qmax = None
+        policy = None
+        for a in self.mdp.getPossibleActions(state):
+            q = self.computeQValueFromValues(state, a)
+            if qmax == None or qmax < q:
+                qmax =q
+                policy = a
+        return policy
+
         util.raiseNotDefined()
 
     def getPolicy(self, state):
