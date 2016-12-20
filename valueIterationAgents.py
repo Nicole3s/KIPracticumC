@@ -49,6 +49,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         copyvalues = self.values.copy()
 
         while self.iterations != counter:
+          copyvalues = util.Counter()
           for s in mdp.getStates():
            maxq = None
 
@@ -88,7 +89,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         q =0
         nextstate = self.mdp.getTransitionStatesAndProbs(state, action)[0]
         for nextstate, prob in self.mdp.getTransitionStatesAndProbs(state, action):
-          q += prob * (self.mdp.getReward(state, action, nextstate) + (self.discount * self.getValue((nextstate))))
+          q += prob * (self.mdp.getReward(state, action, nextstate) + (self.discount * self.getValue(nextstate)))
         return q
 
         util.raiseNotDefined()
