@@ -121,7 +121,7 @@ class QLearningAgent(ReinforcementAgent):
         else:
             action = self.getPolicy(state)
 
-        util.raiseNotDefined()
+       
 
         return action
 
