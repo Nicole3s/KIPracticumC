@@ -52,7 +52,8 @@ class QLearningAgent(ReinforcementAgent):
           or the Q node value otherwise
         """
         "*** YOUR CODE HERE ***"
-        #
+        # source: https://github.com/lightninglu10/pacman-reinforcementlearning/blob/master/qlearningAgents.py
+        # The list qvalues has tuples that consists a state and action.
         return self.qvalues[(state, action)]
         util.raiseNotDefined()
 
