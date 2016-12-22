@@ -66,11 +66,11 @@ class QLearningAgent(ReinforcementAgent):
           terminal state, you should return a value of 0.0.
         """
         "*** YOUR CODE HERE ***"
-        #if there are no legal actions return 0.0
+        # if there are no legal actions return 0.0
         if len(self.getLegalActions(state)) == 0:
             return 0.0
         qmax = None
-        #from the legal action get the q value, if it's larger than the max q value till now,
+        # from the legal action get the q value, if it's larger than the max q value till now,
         # qmax becomes q otherwise qmax stays the same as before. return qmax
 
         for a in self.getLegalActions(state):
@@ -89,12 +89,12 @@ class QLearningAgent(ReinforcementAgent):
           you should return None.
         """
         "*** YOUR CODE HERE ***"
-        #if there are no legal actions return none
+        # if there are no legal actions return none
         if len(self.getLegalActions(state)) == 0:
             return None
         qmax = None
         bestaction = None
-        #for the legal actions get the qmax, if the this legal action has qmax it is the best action. return bestaction
+        # for the legal actions get the qmax, if this legal action has qmax it is the best action. return bestaction
         for a in self.getLegalActions(state):
          q = self.getQValue(state, a)
          if qmax == None or qmax < q:
@@ -119,11 +119,11 @@ class QLearningAgent(ReinforcementAgent):
         legalActions = self.getLegalActions(state)
         action = None
         "*** YOUR CODE HERE ***"
-        #if there are no legal actions return none
+        # if there are no legal actions return none
         if len(legalActions) == 0:
             return None
-        #get the action, the epsilon determines how often a random action occurs, if randprob is true return a random action
-        #otherwise return the action found by the policy
+        # get the action, the epsilon determines how often a random action occurs, if randprob is true return a random action
+        # otherwise return the action found by the policy
         prob = self.epsilon
         randprob = util.flipCoin(prob)
         if randprob:
@@ -145,17 +145,22 @@ class QLearningAgent(ReinforcementAgent):
           it will be called on your behalf
         """
         "*** YOUR CODE HERE ***"
+        # Here we've used the formula of Temporal Difference learning to update the values:
+       
         sample = 0
         qlist =[]
+        # If there are no legal actions the sample is equal to the reward because of sample = reward + discount * 0 = reward
         if len(self.getLegalActions(nextState)) == 0:
           sample = reward
         else:
+            # If there are, then here we calculate sample with the following formula: sample = reward + discount * V(s')
            for nexta in self.getLegalActions(nextState):
              q = self.getQValue(nextState,nexta)
              qlist.append(q)
              qmax = qlist
              sample = reward + self.discount * max(qmax)
 
+        # here we use the formula of TD to update the qvalues in the list called self.qvalues 
         self.qvalues[(state, action)] = (1 - self.alpha) * self.getQValue(state, action) + self.alpha * sample
 
     def getPolicy(self, state):
@@ -219,6 +224,9 @@ class ApproximateQAgent(PacmanQAgent):
           where * is the dotProduct operator
         """
         "*** YOUR CODE HERE ***"
+        # here we get the features by extracting them from the state and action.
+        # We calculate qvalue for a state by first calculating the value for every feature
+        # by multiplying the features with the weights and then by adding the results.
         features = self.featExtractor.getFeatures(state, action)
         q = 0.0
         for f in features.keys():
@@ -232,14 +240,19 @@ class ApproximateQAgent(PacmanQAgent):
            Should update your weights based on transition
         """
         "*** YOUR CODE HERE ***"
+        # Here we use the same formula (TD) as the other update function to update the weights.
+        
         features = self.featExtractor.getFeatures(state, action)
         d =0
         for f in features:
+            # if there aren't no legal actions the sample is equal to reward minus the Qvalue of a state. 
             if len(self.getLegalActions(nextState)) == 0:
                 d = reward - self.getQValue(state, action)
             else:
+                # for every legal action calculate the sample with the same formula of sample as the other update function 
                 for nexta in self.getLegalActions(nextState):
                     d = reward + self.discount * max([(self.getQValue(nextState, nexta))])
+            # Here we update the weights in this list called features by using the formula of TD        
             features[self.weights] = (1 - self.alpha) * self.getQValue(state, action) + self.alpha * d
         util.raiseNotDefined()
 
