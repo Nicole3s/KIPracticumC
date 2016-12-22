@@ -66,9 +66,13 @@ class QLearningAgent(ReinforcementAgent):
           terminal state, you should return a value of 0.0.
         """
         "*** YOUR CODE HERE ***"
+        #if there are no legal actions return 0.0
         if len(self.getLegalActions(state)) == 0:
             return 0.0
         qmax = None
+        #from the legal action get the q value, if it's larger than the max q value till now,
+        # qmax becomes q otherwise qmax stays the same as before. return qmax
+
         for a in self.getLegalActions(state):
             q = self.getQValue(state,a)
             if qmax == None or qmax < q:
@@ -85,10 +89,12 @@ class QLearningAgent(ReinforcementAgent):
           you should return None.
         """
         "*** YOUR CODE HERE ***"
+        #if there are no legal actions return none
         if len(self.getLegalActions(state)) == 0:
             return None
         qmax = None
         bestaction = None
+        #for the legal actions get the qmax, if the this legal action has qmax it is the best action. return bestaction
         for a in self.getLegalActions(state):
          q = self.getQValue(state, a)
          if qmax == None or qmax < q:
@@ -113,8 +119,11 @@ class QLearningAgent(ReinforcementAgent):
         legalActions = self.getLegalActions(state)
         action = None
         "*** YOUR CODE HERE ***"
+        #if there are no legal actions return none
         if len(legalActions) == 0:
             return None
+        #get the action, the epsilon determines how often a random action occurs, if randprob is true return a random action
+        #otherwise return the action found by the policy
         prob = self.epsilon
         randprob = util.flipCoin(prob)
         if randprob:
