@@ -52,7 +52,7 @@ class ValueIterationAgent(ValueEstimationAgent):
           copyvalues = util.Counter()
           for s in mdp.getStates():
            maxq = None
-
+            #get highest q value if there is no value give maxq the value 0
            for a in self.mdp.getPossibleActions(s):
              q = self.computeQValueFromValues(s, a)
              if maxq == None or maxq < q:
@@ -104,11 +104,12 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-
+        #if there are no possible actions return none
         if len(self.mdp.getPossibleActions(state)) == 0:
             return None
         qmax = None
         policy = None
+        #get highest qvalue, if qmax is lower than q (or none) the policy is a(the possible action it computed q for)
         for a in self.mdp.getPossibleActions(state):
             q = self.computeQValueFromValues(state, a)
             if qmax == None or qmax < q:
